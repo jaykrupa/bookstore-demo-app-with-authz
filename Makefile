@@ -4,8 +4,7 @@ TEMPLATES = authentication authorization product
 
 REGION := $(shell python3 -c 'import boto3; print(boto3.Session().region_name)')
 ifndef S3_BUCKET
-ACCOUNT_ID := $(shell aws sts get-caller-identity --query Account --output text)
-S3_BUCKET = bookstore-demo-app-with-authz-src-$(ACCOUNT_ID)-$(REGION)
+S3_BUCKET = bookstore-demo-app-with-authz-src-891377185788-$(REGION)
 endif
 
 install:
@@ -13,7 +12,7 @@ install:
 	curl -sS https://bootstrap.pypa.io/get-pip.py | .env/bin/python
 	.env/bin/python -m pip install -r requirements.txt
 
-backend: create-bucket
+backend: 
 	$(MAKE) -C backend TEMPLATE=authentication S3_BUCKET=$(S3_BUCKET)
 	$(MAKE) -C backend TEMPLATE=authorization S3_BUCKET=$(S3_BUCKET)
 	$(MAKE) -C backend TEMPLATE=product S3_BUCKET=$(S3_BUCKET)
